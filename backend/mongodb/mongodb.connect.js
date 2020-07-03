@@ -15,3 +15,8 @@ async function connect() {
 }
 
 module.exports = { connect };
+
+/*
+user: padawanADM
+pass: ccxmPeJMhJLsdG7s
+*/
