@@ -17,7 +17,7 @@ exports.userSignup = async (req, res, next) => {
 		return next(new HttpError('Invalid inputs, check your data', 403));
 	}
 
-	const { email, password, name } = req.body;
+	const { email, password } = req.body;
 
 	let checkUser;
 	try {
@@ -47,7 +47,6 @@ exports.userSignup = async (req, res, next) => {
 	const userId = v4();
 
 	const createdUser = new User({
-		name,
 		email,
 		password: hashPassword,
 		userId,
@@ -79,7 +78,6 @@ exports.userSignup = async (req, res, next) => {
 
 	res.status(201).json({
 		userId: createdUser.userId,
-		userName: createdUser.name,
 		email: createdUser.email,
 		token: token,
 	});

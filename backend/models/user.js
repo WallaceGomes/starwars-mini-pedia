@@ -7,7 +7,6 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
 	email: { type: String, required: true, unique: true }, //unique: não é um impedimento para haver dois emails iguais no DB, somente otimização
 	password: { type: String, required: true },
-	name: { type: String, required: true },
 	userId: { type: String, required: true },
 });
 
