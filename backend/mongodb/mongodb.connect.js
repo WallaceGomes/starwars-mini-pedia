@@ -15,15 +15,3 @@ async function connect() {
 }
 
 module.exports = { connect };
-
-//promise
-// mongoose
-// 	.connect(`mongodb+srv://admlppv2:rlXdYtKtzpJDax4b@applppv2-eocpc.gcp.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true })
-// 	.then(()=> {
-// 			app.listen(5000);
-// 			console.log('DB Conected');
-// 	})
-// 	.catch(err => {
-// 			console.log(err);
-// 			console.log('DB Conection Error');
-// 	});
