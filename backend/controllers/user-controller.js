@@ -24,6 +24,7 @@ exports.userSignup = async (req, res, next) => {
 		checkUser = await User.findOne({ email: email });
 	} catch (err) {
 		const error = new HttpError('Conection error, UserCheck DB', 500);
+		console.log(err);
 		return next(error);
 	}
 

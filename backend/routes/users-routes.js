@@ -2,12 +2,12 @@ const { Router } = require('express');
 
 const router = Router();
 
-const userControlers = require('../controllers/user-controllers');
+const userController = require('../controllers/user-controller');
 
-router.post('/signup', userControlers.userSignup);
+router.post('/signup', userController.userSignup);
 
-router.post('/login', userControlers.userLogin);
+router.post('/login', userController.userLogin);
 
-router.delete('/:userId', userControlers.userDelete);
+router.delete('/:userId', userController.userDelete);
 
 module.exports = router;

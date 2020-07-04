@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const HttpError = require('./models/http-error');
 const mongoDB = require('./mongodb/mongodb.connect');
+const userRoutes = require('./routes/users-routes');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 	next();
 });
 
+app.use('/api/users', userRoutes);
 
 //error midleware
 app.use((error, req, res, next) => {
