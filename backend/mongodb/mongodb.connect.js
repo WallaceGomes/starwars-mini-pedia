@@ -7,7 +7,8 @@ async function connect() {
 			{
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
-				useCreateIndex: true
+				useCreateIndex: true,
+				useFindAndModify: false
 			});
 		console.log('DB connected!');
 	} catch (err) {

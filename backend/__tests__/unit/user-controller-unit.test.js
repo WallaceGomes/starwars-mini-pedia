@@ -2,6 +2,7 @@ const UserController = require("../../controllers/user-controller");
 const UserModel = require("../../models/user");
 const newUser = require("../mock-data/new-user.json");
 const userLoginmock = require("../mock-data/user-login.json");
+const updateUser = require("../mock-data/update-mock.json")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -22,11 +23,11 @@ beforeEach(() => {
 describe("UserController signUp method", () => {
 	beforeEach(async () => {
 		req.body = newUser;
-		await UserController.userSignup(req, res, next);
+		await UserController.signup(req, res, next);
 	});
 
 	it("should have a signup function", () => {
-		expect(typeof UserController.userSignup).toBe("function");
+		expect(typeof UserController.signup).toBe("function");
 	});
 	it("should call User.findOne", async () => {
 		const { email } = req.body;
@@ -52,32 +53,26 @@ describe("UserController login method", () => {
 	});
 
 	it("should have a login function", () => {
-		expect(typeof UserController.userLogin).toBe("function");
+		expect(typeof UserController.login).toBe("function");
 	});
 
 	it("should call User.findOne", async () => {
-		await UserController.userLogin(req, res, next);
+		await UserController.login(req, res, next);
 		const { email } = req.body;
 		expect(UserModel.findOne).toHaveBeenCalledWith({ email: email });
 	});
 	it("should return 201 respoonse code", async () => {
 		UserModel.findOne.mockReturnValue(userLoginmock.email);
 		bcrypt.compare.mockReturnValue(true);
-		const response = await UserController.userLogin(req, res, next);
+		const response = await UserController.login(req, res, next);
 		expect(response.statusCode).toBe(201);
-		expect(response._isEndCalled()).toBeTruthy();
-	});
-	it("should return 401 respoonse code when receive invalid credentials", async () => {
-		UserModel.findOne.mockReturnValue(null);
-		const response = await UserController.userLogin(req, res, next);
-		expect(response.statusCode).toBe(401);
 		expect(response._isEndCalled()).toBeTruthy();
 	});
 });
 
 describe("UserController getUser method", () => {
 	it("should call User.find", async () => {
-		await UserController.getUsers(req, res, next);
+		await UserController.index(req, res, next);
 		expect(UserModel.find).toHaveBeenCalled();
 	});
 });
@@ -86,9 +81,21 @@ describe("UserController userDelete method", () => {
 	beforeEach(async () => {
 		const userId = '5f00c4b01ffe2c3358b7d04d';
 		req.params.userId = userId;
-		await UserController.userDelete(req, res, next);
+		await UserController.delete(req, res, next);
 	});
 	it("should call User.findById", async () => {
 		expect(UserModel.findById).toHaveBeenCalledWith({ _id: req.params.userId });
 	});
 });
+
+describe("UserController update method", () => {
+	beforeEach(async () => {
+		const userId = '5f00c4b01ffe2c3358b7d04d';
+		req.body = updateUser;
+		req.params.userId = userId;
+		UserController.update(req, res, next);
+	});
+	it("should call User.findOneAndUpdate", async () => {
+		expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith({ _id: req.params.userId }, updateUser);
+	});
+})

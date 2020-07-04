@@ -7,7 +7,7 @@ const User = require('../models/user');
 
 const HttpError = require('../models/http-error');
 
-exports.getUsers = async (req, res, next) => {
+exports.index = async (req, res, next) => {
 
 	let users;
 	try {
@@ -20,7 +20,7 @@ exports.getUsers = async (req, res, next) => {
 	res.json(users);
 };
 
-exports.userSignup = async (req, res, next) => {
+exports.signup = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return next(new HttpError('Invalid inputs, check your data', 403));
@@ -73,7 +73,7 @@ exports.userSignup = async (req, res, next) => {
 	try {
 		token = jwt.sign(
 			{ userId: createdUser.id, email: createdUser.email },
-			'XKpa646abvDSAd1328daAPPLPP', //process.env.JWT_KEY
+			process.env.JWT_KEY,
 			{ expiresIn: '12h' },
 		);
 	} catch (err) {
@@ -94,7 +94,7 @@ exports.userSignup = async (req, res, next) => {
 	return res.json();
 };
 
-exports.userLogin = async (req, res, next) => {
+exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
 
 	let user;
@@ -144,10 +144,22 @@ exports.userLogin = async (req, res, next) => {
 	});
 };
 
-exports.userDelete = async (req, res, next) => {
+exports.delete = async (req, res, next) => {
 	const userId = req.params.userId;
 
-	let user = await User.findById({ _id: userId });
+	let user;
+
+	try {
+		user = await User.findById({ _id: userId });
+	} catch (err) {
+		const error = new HttpError('Error to find the user', 500);
+		return next(error);
+	}
+
+	if (!user) {
+		const error = new HttpError('Could not find any user for the provided id', 404);
+		return next(error);
+	}
 
 	try {
 		const sess = await mongoose.startSession();
@@ -155,10 +167,32 @@ exports.userDelete = async (req, res, next) => {
 		await user.remove({ session: sess });
 		await sess.commitTransaction();
 	} catch (err) {
-		console.log(err);
 		const error = new HttpError('Error deleting the user, DB session', 500);
 		return next(error);
 	}
 
 	res.status(200).json({ message: 'User deleted!' });
+};
+
+exports.update = async (req, res, next) => {
+	const { userId } = req.params;
+	const { email, name } = req.body;
+
+	const updatedUser = { email: email, name: name }
+
+	let user;
+
+	try {
+		user = await User.findOneAndUpdate({ _id: userId }, updatedUser);
+	} catch (err) {
+		const error = new HttpError('User already exists or DB error', 500);
+		return next(error);
+	}
+
+	if (!user) {
+		const error = new HttpError('Could not find any user for the provided email', 404);
+		return next(error);
+	}
+
+	res.status(200).json({ message: 'User updated!', user: updatedUser });
 };

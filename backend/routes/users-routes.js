@@ -3,15 +3,18 @@ const { Router } = require('express');
 const router = Router();
 
 const userController = require('../controllers/user-controller');
+const checkAuth = require('../middleware/check-auth');
 
-router.post('/signup', userController.userSignup);
+router.post('/signup', userController.signup);
 
-router.get('/', userController.getUsers);
+router.post('/login', userController.login);
 
-router.post('/login', userController.userLogin);
+router.use(checkAuth);
 
-// router.put('/:userId', userController.editUser);
+router.get('/', userController.index);
 
-router.delete('/:userId', userController.userDelete);
+router.put('/:userId', userController.update);
+
+router.delete('/:userId', userController.delete);
 
 module.exports = router;
