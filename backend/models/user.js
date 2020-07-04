@@ -3,13 +3,24 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const Schema = mongoose.Schema;
 
-//NOTA: Após testes de integração setar email para unique: true!!!
 const userSchema = new Schema({
-	email: { type: String, required: true, unique: true }, //unique: não é um impedimento para haver dois emails iguais no DB, somente otimização
+	name: { type: String, required: true },
+	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
-	userId: { type: String, required: true },
+	created_at: { type: Date },
+	updated_at: { type: Date },
 });
 
 userSchema.plugin(uniqueValidator);
+
+userSchema.pre('findOneAndUpdate', function (next) {
+	this.updated_at = Date.now();
+	next();
+});
+
+userSchema.pre('save', function (next) {
+	this.created_at = Date.now();
+	next();
+});
 
 module.exports = mongoose.model('User', userSchema);

@@ -2,14 +2,24 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
-const { v4 } = require('uuid');
 
 const User = require('../models/user');
 
 const HttpError = require('../models/http-error');
-//HttpError('message', code);
 
-//TODO => foto de perfil, editar perfil, configurações, delete, patch
+exports.getUsers = async (req, res, next) => {
+
+	let users;
+	try {
+		users = await User.find({}, '-password'); //projection -> {} objeto, -pass retorna tudo menos o pass
+	} catch (err) {
+		const error = new HttpError('Could not find a user!', 500);
+		return next(error);
+	}
+
+	//nota: find retorna um array, por isso tem que usar map
+	res.json({ users: users.map(user => user.toObject({ getters: true })) });
+};
 
 exports.userSignup = async (req, res, next) => {
 	const errors = validationResult(req);
@@ -17,7 +27,7 @@ exports.userSignup = async (req, res, next) => {
 		return next(new HttpError('Invalid inputs, check your data', 403));
 	}
 
-	const { email, password } = req.body;
+	const { name, email, password } = req.body;
 
 	let checkUser;
 	try {
@@ -33,9 +43,9 @@ exports.userSignup = async (req, res, next) => {
 		return next(error);
 	}
 
-	let hashPassword;
+	let hashedPassword;
 	try {
-		hashPassword = await bcrypt.hash(password, 12);
+		hashedPassword = await bcrypt.hash(password, 12);
 	} catch (err) {
 		const error = new HttpError(
 			'Could not create user, try again later. (server hash error)',
@@ -44,19 +54,17 @@ exports.userSignup = async (req, res, next) => {
 		return next(error);
 	}
 
-	//uuid
-	const userId = v4();
-
 	const createdUser = new User({
+		name,
 		email,
-		password: hashPassword,
-		userId,
+		password: hashedPassword,
 	});
 
 	try {
 		await createdUser.save();
 	} catch (err) {
 		const error = new HttpError('Signup failed. (Server create.save)', 500);
+		console.log(err);
 		return next(error);
 	}
 
@@ -65,7 +73,7 @@ exports.userSignup = async (req, res, next) => {
 
 	try {
 		token = jwt.sign(
-			{ userId: createdUser.userId, email: createdUser.email },
+			{ userId: createdUser.id, email: createdUser.email },
 			'XKpa646abvDSAd1328daAPPLPP', //process.env.JWT_KEY
 			{ expiresIn: '12h' },
 		);
@@ -78,7 +86,8 @@ exports.userSignup = async (req, res, next) => {
 	}
 
 	res.status(201).json({
-		userId: createdUser.userId,
+		userName: createdUser.name,
+		userId: createdUser.id,
 		email: createdUser.email,
 		token: token,
 	});
@@ -119,7 +128,7 @@ exports.userLogin = async (req, res, next) => {
 	let token;
 	try {
 		token = jwt.sign(
-			{ userId: user.userId, email: user.emil },
+			{ userId: user.id, email: user.emil },
 			'XKpa646abvDSAd1328daAPPLPP', //process.env.JWT_KEY
 			{ expiresIn: '12h' },
 		);
@@ -129,7 +138,8 @@ exports.userLogin = async (req, res, next) => {
 	}
 
 	return res.status(201).json({
-		userId: user.userId,
+		userName: user.name,
+		userId: user.id,
 		email: user.email,
 		token: token,
 	});
@@ -138,13 +148,9 @@ exports.userLogin = async (req, res, next) => {
 exports.userDelete = async (req, res, next) => {
 	const userId = req.params.userId;
 
-	let user = await User.find({ userId: userId });
-	//user = user[0]._id;
-	//user.find retorna um array com os usuários achados com aquela propriedade
-	//uuid é teóricamente único então só vai retornar
-	//abaixo eu pego esse um e retorno ele novamente, dessa vez para deletar
-	//provavelmente dá pra melhorar ainda...
-	user = await User.findById(user[0]._id);
+	let user = await User.findById({ _id: userId });
+
+	console.log(user);
 
 	try {
 		const sess = await mongoose.startSession();

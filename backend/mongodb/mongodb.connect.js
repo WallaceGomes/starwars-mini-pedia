@@ -5,7 +5,8 @@ async function connect() {
 		await mongoose.connect(`mongodb+srv://padawanADM:ccxmPeJMhJLsdG7s@maincluster.9mnxh.mongodb.net/test?retryWrites=true&w=majority`,
 			{
 				useNewUrlParser: true,
-				useUnifiedTopology: true
+				useUnifiedTopology: true,
+				useCreateIndex: true
 			});
 		console.log('DB connected!');
 	} catch (err) {
