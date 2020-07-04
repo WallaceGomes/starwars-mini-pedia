@@ -1,8 +1,8 @@
 {
 	"env": {
-		"DB_USER": "",
-		"DB_PASS": "",
-		"DB_NAME": "",
-		"JWT_KEY": ""
+		"DB_USER": "padawanADM",
+		"DB_PASS": "ccxmPeJMhJLsdG7s",
+		"DB_NAME": "test",
+		"JWT_KEY": "TYpa646abvDSAd1328das2"
 	}
 }

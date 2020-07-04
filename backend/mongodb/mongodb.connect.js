@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
+
 async function connect() {
 	try {
-		await mongoose.connect(`mongodb+srv://padawanADM:ccxmPeJMhJLsdG7s@maincluster.9mnxh.mongodb.net/test?retryWrites=true&w=majority`,
+		await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@maincluster.9mnxh.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
 			{
 				useNewUrlParser: true,
 				useUnifiedTopology: true,

@@ -17,8 +17,7 @@ exports.getUsers = async (req, res, next) => {
 		return next(error);
 	}
 
-	//nota: find retorna um array, por isso tem que usar map
-	res.json({ users: users.map(user => user.toObject({ getters: true })) });
+	res.json(users);
 };
 
 exports.userSignup = async (req, res, next) => {
@@ -129,7 +128,7 @@ exports.userLogin = async (req, res, next) => {
 	try {
 		token = jwt.sign(
 			{ userId: user.id, email: user.emil },
-			'XKpa646abvDSAd1328daAPPLPP', //process.env.JWT_KEY
+			process.env.JWT_KEY,
 			{ expiresIn: '12h' },
 		);
 	} catch (err) {
@@ -149,8 +148,6 @@ exports.userDelete = async (req, res, next) => {
 	const userId = req.params.userId;
 
 	let user = await User.findById({ _id: userId });
-
-	console.log(user);
 
 	try {
 		const sess = await mongoose.startSession();

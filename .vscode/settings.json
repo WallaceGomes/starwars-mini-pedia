@@ -3,5 +3,6 @@
 	"editor.fontSize": 16,
 	"emmet.syntaxProfiles": {
 		"javascript": "jsx"
-	}
+	},
+	"git.ignoreLimitWarning": true
 }
