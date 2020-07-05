@@ -13,10 +13,12 @@ const userSchema = new Schema({
 
 userSchema.plugin(uniqueValidator);
 
-userSchema.pre('findOneAndUpdate', function (next) {
-	this.updated_at = Date.now();
-	next();
-});
+// userSchema.pre('findOneAndUpdate', async function (next) {
+// 	const docToUpdate = await this.model.findOne(this.getQuery());
+// 	docToUpdate.updated_at = Date.now();
+// 	console.log("findOneAndUpdate");
+// 	next();
+// });
 
 userSchema.pre('save', function (next) {
 	this.created_at = Date.now();

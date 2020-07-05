@@ -93,9 +93,9 @@ describe("UserController update method", () => {
 		const userId = '5f00c4b01ffe2c3358b7d04d';
 		req.body = updateUser;
 		req.params.userId = userId;
-		UserController.update(req, res, next);
 	});
 	it("should call User.findOneAndUpdate", async () => {
-		expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith({ _id: req.params.userId }, updateUser);
+		await UserController.update(req, res, next);
+		expect(UserModel.findOneAndUpdate).toHaveBeenCalled();
 	});
 })

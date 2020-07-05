@@ -1,19 +1,36 @@
 const { Router } = require('express');
 
 const router = Router();
+const { body } = require('express-validator');
 
 const userController = require('../controllers/user-controller');
 const checkAuth = require('../middleware/check-auth');
 
-router.post('/signup', userController.signup);
+router.post('/signup',
+	[
+		body('name').not().isEmpty(),
+		body('email').isEmail(),
+		body('password').not().isEmpty().isLength({ min: 6 }),
+	],
+	userController.signup);
 
-router.post('/login', userController.login);
+router.post('/login',
+	[
+		body('password').not().isEmpty(),
+		body('email').isEmail(),
+	],
+	userController.login);
 
 router.use(checkAuth);
 
 router.get('/', userController.index);
 
-router.put('/:userId', userController.update);
+router.put('/:userId',
+	[
+		body('name').not().isEmpty(),
+		body('email').isEmail(),
+	],
+	userController.update);
 
 router.delete('/:userId', userController.delete);
 

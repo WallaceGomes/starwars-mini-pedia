@@ -95,10 +95,13 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return next(new HttpError('Invalid inputs, check your data', 403));
+	}
 	const { email, password } = req.body;
 
 	let user;
-
 	try {
 		user = await User.findOne({ email: email });
 	} catch (err) {
@@ -175,10 +178,14 @@ exports.delete = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return next(new HttpError('Invalid inputs, check your data', 403));
+	}
 	const { userId } = req.params;
 	const { email, name } = req.body;
 
-	const updatedUser = { email: email, name: name }
+	const updatedUser = { email: email, name: name, updated_at: Date.now() }
 
 	let user;
 
