@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+require('dotenv').config();
 const HttpError = require('./models/http-error');
 const mongoDB = require('./mongodb/mongodb.connect');
 const userRoutes = require('./routes/users-routes');
