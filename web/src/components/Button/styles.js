@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledButton = styled.button`
-	height: 40px;
-	width: 100px;
-	background: #00001a;
+	height: 35px;
+	width: 90px;
+	background: #0d0d0d;
 	border: 1px solid #ffff33;
 	color: #fff;
 	font-weight: bold;
@@ -14,8 +14,9 @@ export const StyledButton = styled.button`
 	font-size: 14px;
 
 	&:hover{
-		color: #ffff33;
-		transition: 0.5s;
+		color: #000000;
+		background: #fff;
+		transition: 0.3s;
 	}
 
 	&:disabled,
