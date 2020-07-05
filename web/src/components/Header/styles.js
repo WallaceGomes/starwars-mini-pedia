@@ -13,5 +13,4 @@ export const MainHeader = styled.header`
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
 	padding-right: 10rem;
 	padding-left: 9rem;
-  z-index: 5;
 `;
