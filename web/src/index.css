@@ -9,5 +9,10 @@
 
 body {
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	-moz-osx-font-smoothing: grayscale;
+
+	background-image: url('./assets/background_image.jpg');
+	background-repeat: no-repeat;
+	background-repeat: no-repeat;
+	background-size: cover;
 }

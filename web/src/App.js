@@ -2,13 +2,16 @@ import React from 'react';
 import './App.css';
 
 import Button from './components/Button/index';
+import Header from './components/Header/index';
+import Logo from './components/Logo/index';
 
 function App() {
 	return (
 		<div className="App">
-			<header className="App-header">
-				<Button>Login</Button>
-			</header>
+			<Header>
+				<Logo />
+			</Header>
+			<Button>Login</Button>
 		</div>
 	);
 }
