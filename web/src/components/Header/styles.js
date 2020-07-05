@@ -9,7 +9,7 @@ export const MainHeader = styled.header`
   position: fixed;
   top: 0;
   left: 0;
-  background: #0d0d0d;
+	background: rgba(0, 0, 0, 0.3);
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
 	padding-right: 10rem;
 	padding-left: 9rem;
