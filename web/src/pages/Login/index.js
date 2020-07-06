@@ -5,8 +5,9 @@ import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from '../../util/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpiner';
 import Logo from '../../components/Logo';
+import { validate, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../util/validators';
 
-import { Container, SwitchMode } from './styles';
+import { Container, SwitchMode, Validate } from './styles';
 
 //TODO : Validation
 
@@ -19,6 +20,10 @@ const Login = () => {
 	const { sendRequest, isLoading } = useHttpClient();
 
 	const auth = useContext(AuthContext);
+
+	const isEmailValid = validate(userEmail, [VALIDATOR_EMAIL(), VALIDATOR_REQUIRE()]);
+	const isPasswordValid = validate(userPassword, [VALIDATOR_MINLENGTH(6)]);
+	const isUserNameValid = validate(userName, [VALIDATOR_REQUIRE()])
 
 	const authSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -70,8 +75,11 @@ const Login = () => {
 		<>
 			{isLoading && <LoadingSpinner asOverLay />}
 			<Container>
-				<Logo/>
+				<Logo />
 				<form onSubmit={authSubmitHandler}>
+					{!isEmailValid && (
+						<Validate>Please enter a valid email address</Validate>
+					)}
 					<Input
 						type="email"
 						name="userEmail"
@@ -81,6 +89,9 @@ const Login = () => {
 					/>
 					{!isLoginMode && (
 						<>
+							{!isUserNameValid && (
+								<Validate>Please enter your name</Validate>
+							)}
 							<Input
 								type="text"
 								name="userName"
@@ -89,6 +100,9 @@ const Login = () => {
 								setValue={setUserName}
 							/>
 						</>
+					)}
+					{!isPasswordValid && (
+						<Validate>Password min 6 chars</Validate>
 					)}
 					<Input
 						type="password"

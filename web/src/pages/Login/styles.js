@@ -3,13 +3,11 @@ import styled from 'styled-components';
 export const Container = styled.div`
 	background: #262626;
 	width: 320px;
-	heigth: 500px;
-	margin: 300px auto;
+	margin: 180px auto;
 	padding: 10px;
 	border-radius: 5px;
-	
+
 		a img{
-			heigth: 100px;
 			width: 100px;
 			margin-left: 90px;
 		}
@@ -27,7 +25,6 @@ export const Container = styled.div`
 			margin-left: 40px;
 			font-size: 16px;
 		}
-	}
 `;
 
 export const SwitchMode = styled.div`
@@ -42,4 +39,9 @@ export const SwitchMode = styled.div`
 	small{
 		color: #fff;
 	}
+`;
+
+export const Validate = styled.small`
+color: #ff3333;
+margin-left: 50px;
 `;
