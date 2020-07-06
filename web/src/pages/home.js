@@ -16,16 +16,11 @@ function Home() {
 	const [planets, setPlanets] = useState([]);
 
 	const [pages, setPages] = useState(null);
-	// const [currentPage, setCurrentPage] = useState(null);
 	const [currentResource, setCurrentResource] = useState('people');
 	const [nextPage, setNextPage] = useState('');
 	const [previousPage, setPreviousPage] = useState('');
 
 	const { sendRequest, isLoading } = useHttpClient();
-
-
-	// setNextPage(people.next);
-	// setPreviousPage(people.previous);
 
 	const perviousPageHandler = async () => {
 		if (previousPage === null) {
@@ -69,8 +64,8 @@ function Home() {
 
 
 	const requestStarshipsHandler = async (link) => {
-
 		try {
+			console.log(link);
 			const response = await sendRequest(link || 'https://swapi.dev/api/starships/');
 			setStarships(response.results);
 			setPages(Math.round(response.count / 10))
@@ -78,6 +73,7 @@ function Home() {
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
 		} catch (err) {
+			console.log(err);
 		}
 	}
 
@@ -90,7 +86,6 @@ function Home() {
 			setCurrentResource('people');
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
-			// setCurrentPage(1);
 		} catch (err) {
 		}
 
@@ -104,7 +99,6 @@ function Home() {
 			setCurrentResource('planets');
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
-			// setCurrentPage(1);
 		} catch (err) {
 		}
 	}
@@ -115,7 +109,6 @@ function Home() {
 			setPages(Math.ceil(response.count / 10));
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
-			// setCurrentPage(1);
 		})
 	}, []);
 
@@ -126,9 +119,9 @@ function Home() {
 				<Button >Login</Button>
 			</Header>
 			<StyledNav>
-				<li><button onClick={requestPeoplesHandler} >Peoples</button></li>
-				<li><button onClick={requestStarshipsHandler} >Starships</button></li>
-				<li><button onClick={requestPlanetsHandler} >Planets</button></li>
+				<li><button onClick={() => requestPeoplesHandler('https://swapi.dev/api/people/')} >Peoples</button></li>
+				<li><button onClick={() => requestStarshipsHandler('https://swapi.dev/api/starships/')} >Starships</button></li>
+				<li><button onClick={() => requestPlanetsHandler('https://swapi.dev/api/planets/')} >Planets</button></li>
 			</StyledNav>
 			<StyledNav>
 				<li><button onClick={perviousPageHandler} >Previous Page</button></li>
@@ -186,7 +179,6 @@ function Home() {
 									<span>Cost(credits): {startship.cost_in_credits} </span>
 									<span>Length: {startship.length} </span>
 									<span>Max speed: {startship.max_atmosphering_speed} </span>
-									<span>Crew: {startship.crew} </span>
 									<span>Cargo: {startship.cargo_capacity} </span>
 									<span>Class: {startship.starship_class} </span>
 								</Card>

@@ -2,13 +2,14 @@ import styled from 'styled-components';
 
 export const Container = styled.section`
 width: 90%vh;
-max-width: 1168px;
+max-width: 100%;
 border: 1px solid #cccc00;
 height: 700px;
 border-radius: 20px;
 margin: 20px;
 display: grid;
 grid-template-columns: repeat(5, 1fr);
+transition: ease all .6s;
 
 @media(max-width: 1180px){
 	grid-template-columns: repeat(4, 1fr);
