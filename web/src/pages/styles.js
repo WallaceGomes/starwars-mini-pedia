@@ -6,7 +6,7 @@ export const StyledNav = styled.ul`
 	justify-content: center;
 	align-items: center;
 	padding-top: 10px;
-	margin-top: 5rem;
+	margin-top: 3rem;
 	display: flex;
 	list-style: none;
 	button{
@@ -27,9 +27,6 @@ export const StyledNav = styled.ul`
 			color: #000000;
 		}
 	}
-	svg{
-      margin-left: 5px;
-    }
 	li{
 		align-items: center;
 	}
