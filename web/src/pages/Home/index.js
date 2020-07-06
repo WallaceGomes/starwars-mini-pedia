@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import Button from '../components/Button/index';
-import Header from '../components/Header/index';
-import Logo from '../components/Logo/index';
+import Button from '../../components/Button/index';
+import Header from '../../components/Header/index';
+import Logo from '../../components/Logo/index';
 import { StyledNav } from './styles';
-import { useHttpClient } from './../hooks/http-hook';
-import LoadingSpinner from '../components/LoadingSpiner';
-import Wraper from '../components/Wraper/index';
-import Card from '../components/Card';
+import { useHttpClient } from '../../hooks/http-hook';
+import LoadingSpinner from '../../components/LoadingSpiner';
+import Wraper from '../../components/Wraper/index';
+import Card from '../../components/Card';
+
+import { AuthContext } from './../../util/AuthContext';
 
 function Home() {
 
@@ -116,7 +118,7 @@ function Home() {
 		<>
 			<Header>
 				<Logo />
-				<Button >Login</Button>
+				<Button>Login</Button>
 			</Header>
 			<StyledNav>
 				<li><button onClick={() => requestPeoplesHandler('https://swapi.dev/api/people/')} >Peoples</button></li>
