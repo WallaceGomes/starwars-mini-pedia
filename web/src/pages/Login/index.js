@@ -4,6 +4,9 @@ import Input from '../../components/Input';
 import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from '../../util/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpiner';
+import Logo from '../../components/Logo';
+
+import { Container, SwitchMode } from './styles';
 
 //TODO : Validation
 
@@ -66,40 +69,43 @@ const Login = () => {
 	return (
 		<>
 			{isLoading && <LoadingSpinner asOverLay />}
-			<form onSubmit={authSubmitHandler} className="auth-form">
-				<Input
-					type="email"
-					name="userEmail"
-					placeholder="Email"
-					value={userEmail}
-					onChange={(e) => setUserEmail(e.target.value)}
-				/>
-				{!isLoginMode && (
-					<>
-						<Input
-							type="text"
-							name="userName"
-							placeholder="Name"
-							value={userName}
-							onChange={(e) => setUserName(e.target.value)}
-						/>
-					</>
-				)}
-				<Input
-					type="password"
-					name="userPass"
-					placeholder="Password"
-					value={userPassword}
-					onChange={(e) => setUserPassword(e.target.value)}
-				/>
-				<Button type="submit">{isLoginMode ? 'Login' : 'Register'}</Button>
-			</form>
-			<div className="switch-mode">
-				<small>Don't have a registration yet?</small>
-				<Button onClick={switchModeHandler}>
-					Change to {isLoginMode ? 'Register' : 'Login'}
-				</Button>
-			</div>
+			<Container>
+				<Logo/>
+				<form onSubmit={authSubmitHandler}>
+					<Input
+						type="email"
+						name="userEmail"
+						placeholder="Email"
+						value={userEmail}
+						setValue={setUserEmail}
+					/>
+					{!isLoginMode && (
+						<>
+							<Input
+								type="text"
+								name="userName"
+								placeholder="Name"
+								value={userName}
+								setValue={setUserName}
+							/>
+						</>
+					)}
+					<Input
+						type="password"
+						name="userPass"
+						placeholder="Password"
+						value={userPassword}
+						setValue={setUserPassword}
+					/>
+					<Button type="submit">{isLoginMode ? 'Login' : 'Register'}</Button>
+				</form>
+				<SwitchMode>
+					<small>{isLoginMode ? `Don't have an account?` : 'Already have an account?'}</small>
+					<Button onClick={switchModeHandler}>
+						{isLoginMode ? 'Signup' : 'Login'}
+					</Button>
+				</SwitchMode>
+			</Container>
 		</>
 	);
 };

@@ -61,13 +61,13 @@ function Home() {
 					requestPeoplesHandler(nextPage);
 			}
 		} catch (err) {
+			console.log(err);
 		}
 	}
 
 
 	const requestStarshipsHandler = async (link) => {
 		try {
-			console.log(link);
 			const response = await sendRequest(link || 'https://swapi.dev/api/starships/');
 			setStarships(response.results);
 			setPages(Math.round(response.count / 10))
@@ -89,6 +89,7 @@ function Home() {
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
 		} catch (err) {
+			console.log(err);
 		}
 
 	}
@@ -102,6 +103,7 @@ function Home() {
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
 		} catch (err) {
+			console.log(err);
 		}
 	}
 
@@ -111,7 +113,7 @@ function Home() {
 			setPages(Math.ceil(response.count / 10));
 			setNextPage(response.next);
 			setPreviousPage(response.previous);
-		})
+		});
 	}, []);
 
 	return (
