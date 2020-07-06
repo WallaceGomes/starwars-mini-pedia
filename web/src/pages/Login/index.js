@@ -21,6 +21,7 @@ const Login = () => {
 
 	const auth = useContext(AuthContext);
 
+	//isso aqui está horrivel e dá pra melhorar, é temporário...
 	const isEmailValid = validate(userEmail, [VALIDATOR_EMAIL(), VALIDATOR_REQUIRE()]);
 	const isPasswordValid = validate(userPassword, [VALIDATOR_MINLENGTH(6)]);
 	const isUserNameValid = validate(userName, [VALIDATOR_REQUIRE()])
@@ -75,7 +76,7 @@ const Login = () => {
 		<>
 			{isLoading && <LoadingSpinner asOverLay />}
 			<Container>
-				<Logo />
+				<Logo></Logo>
 				<form onSubmit={authSubmitHandler}>
 					{!isEmailValid && (
 						<Validate>Please enter a valid email address</Validate>

@@ -7,7 +7,7 @@ export const Container = styled.div`
 	padding: 10px;
 	border-radius: 5px;
 
-		a img{
+		button img{
 			width: 100px;
 			margin-left: 90px;
 		}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import Button from '../../components/Button/index';
 import Header from '../../components/Header/index';
@@ -25,6 +25,7 @@ const Home = () => {
 	const [previousPage, setPreviousPage] = useState('');
 
 	const { sendRequest, isLoading } = useHttpClient();
+	const auth = useContext(AuthContext);
 
 	const perviousPageHandler = async () => {
 		if (previousPage === null) {
@@ -123,12 +124,20 @@ const Home = () => {
 			<Header>
 				<Logo />
 				<div>
-					<Link to="/login">
-						<Button>Login</Button>
-					</Link>
-					<Link to="/admin">
-						<Button>Admin</Button>
-					</Link>
+					{auth.isLoggedIn &&
+						<>
+							<Button onClick={auth.logout} >Logout</Button>
+							<Link to="/admin">
+								<Button>Admin</Button>
+							</Link>
+						</>
+					}
+					{
+						!auth.isLoggedIn &&
+						<Link to="/login">
+							<Button>Login</Button>
+						</Link>
+					}
 				</div>
 			</Header>
 			<StyledNav>

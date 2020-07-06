@@ -49,6 +49,7 @@ const App = () => {
 		localStorage.removeItem('userData');
 	}, []);
 
+
 	useEffect(() => {
 		if (token && tokenExpirationDate) {
 			const remainingTime =
@@ -77,7 +78,19 @@ const App = () => {
 
 	let routes;
 
-	if (true) {
+	if (token) {
+		routes = (
+			<Switch>
+				<Route path="/" exact>
+					<Home />
+				</Route>
+				<Route path="/admin" >
+					<Admin />
+				</Route>
+				<Redirect to="/" />
+			</Switch>
+		);
+	} else {
 		routes = (
 			<Switch>
 				<Route path="/" exact>
@@ -86,13 +99,25 @@ const App = () => {
 				<Route path="/login" exact>
 					<Login />
 				</Route>
-				<Route path="/admin" >
-					<Admin />
-				</Route>
 				<Redirect to="/" />
 			</Switch>
-		)
+		);
 	}
+
+	// const routes = (
+	// 	<Switch>
+	// 		<Route path="/" exact>
+	// 			<Home />
+	// 		</Route>
+	// 		<Route path="/login" exact>
+	// 			<Login />
+	// 		</Route>
+	// 		<Route path="/admin" >
+	// 			<Admin />
+	// 		</Route>
+	// 		<Redirect to="/" />
+	// 	</Switch>
+	// );
 
 	return (
 		<AuthContext.Provider

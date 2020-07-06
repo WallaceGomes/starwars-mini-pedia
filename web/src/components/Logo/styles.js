@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
-export const MainLogo = styled.a`
+export const MainLogo = styled.button`
 
 	&:hover{
 		cursor: pointer;
 	}
+	background: rgba(0,0,0,0);
+	border: none;
 
 	img{
 		width: 90px;

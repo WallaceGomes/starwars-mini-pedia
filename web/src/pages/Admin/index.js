@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Button';
@@ -16,23 +16,32 @@ const Admin = () => {
 	const { sendRequest, isLoading } = useHttpClient();
 
 	const [users, setUsers] = useState([]);
+	const auth = useContext(AuthContext);
 
 	useEffect(() => {
-		// sendRequest('').then((response) => {
-		// 	setUsers(response.data);
-		// });
+		const storedData = JSON.parse(localStorage.getItem('userData'));
+
+		sendRequest('http://localhost:5000/api/users/',
+			'GET',
+			null,
+			{
+				'Authorization': 'Bearer ' + `${storedData.token}`
+			}
+		).then((response) => {
+			setUsers(response);
+		});
 	}, []);
 
 	return (
 		<>
 			<Header>
 				<Logo />
-				<Button>Logout</Button>
+				<Button onClick={auth.logout} >Logout</Button>
 			</Header>
 			<Container>
 				<Header>
 					<h1>Manage Users</h1>
-					<Button>New User</Button>
+					<Button onClick={() => (console.log(users))}>New User</Button>
 				</Header>
 				{isLoading && LoadingSpinner}
 				<Description>
@@ -46,12 +55,12 @@ const Admin = () => {
 					users && (
 						users.map((user) => {
 							return (
-								<ListItens key={user.userId}>
-									<span>{user.userId}</span>
+								<ListItens key={user._id}>
+									<span>{user._id}</span>
 									<span>{user.name}</span>
 									<span>{user.email}</span>
-									<span> {user.created_at} </span>
-									<span> {user.edited_at || 'N/A'}</span>
+									<span>{user.created_at}</span>
+									<span>{user.edited_at || 'N/A'}</span>
 								</ListItens>
 							)
 						})
