@@ -13,6 +13,7 @@ import LoadingSpinner from './components/LoadingSpiner';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Login = React.lazy(() => import('./pages/Login'));
+const Admin = React.lazy(() => import('./pages/Admin'));
 
 let logoutTimer;
 
@@ -84,6 +85,9 @@ const App = () => {
 				</Route>
 				<Route path="/login" exact>
 					<Login />
+				</Route>
+				<Route path="/admin" >
+					<Admin />
 				</Route>
 				<Redirect to="/" />
 			</Switch>

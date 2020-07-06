@@ -8,10 +8,12 @@ import { useHttpClient } from '../../hooks/http-hook';
 import LoadingSpinner from '../../components/LoadingSpiner';
 import Wraper from '../../components/Wraper/index';
 import Card from '../../components/Card';
+import { Link } from 'react-router-dom';
+
 
 import { AuthContext } from './../../util/AuthContext';
 
-function Home() {
+const Home = () => {
 
 	const [peoples, setPeoples] = useState([]);
 	const [starships, setStarships] = useState([]);
@@ -120,7 +122,14 @@ function Home() {
 		<>
 			<Header>
 				<Logo />
-				<Button>Login</Button>
+				<div>
+					<Link to="/login">
+						<Button>Login</Button>
+					</Link>
+					<Link to="/admin">
+						<Button>Admin</Button>
+					</Link>
+				</div>
 			</Header>
 			<StyledNav>
 				<li><button onClick={() => requestPeoplesHandler('https://swapi.dev/api/people/')} >Peoples</button></li>
