@@ -23,6 +23,8 @@ router.post('/login',
 
 router.get('/forgot', userController.forgotPassword);
 
+router.put('/reset/:resetLink', userController.resetPass);
+
 router.use(checkAuth);
 
 router.get('/', userController.index);

@@ -200,7 +200,7 @@ exports.update = async (req, res, next) => {
 	}
 
 	if (!user) {
-		const error = new HttpError('Could not find any user for the provided email', 404);
+		const error = new HttpError('Could not find any user for the provided ID', 404);
 		return next(error);
 	}
 
@@ -255,4 +255,53 @@ exports.forgotPassword = async (req, res, next) => {
 			}
 		});
 	res.status(202).json({ message: 'Message delivered succesfully' });
+}
+
+exports.resetPass = async (req, res, next) => {
+	const { newPassword } = req.body;
+	const { resetLink } = req.params;
+
+	if (resetLink) {
+		jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, async (err, decodedData) => {
+			if (err) {
+				const error = new HttpError('Authentication error', 401);
+				console.log(err);
+				return next(error);
+			}
+
+			let hashedPassword;
+			try {
+				hashedPassword = await bcrypt.hash(newPassword, 12);
+			} catch (err) {
+				const error = new HttpError(
+					'Could not create user, try again later. (server hash error)',
+					500,
+				);
+				return next(error);
+			}
+
+			const updatedUser = { password: hashedPassword, updated_at: Date.now() }
+
+			let user;
+
+			try {
+				user = await User.findOneAndUpdate({ _id: decodedData.userId }, updatedUser);
+			} catch (err) {
+				const error = new HttpError('Unexpected error', 500);
+				console.log(err);
+				return next(error);
+			}
+
+			if (!user) {
+				const error = new HttpError('Could not find any user for the provided ID', 404);
+				return next(error);
+			}
+
+		})
+	} else {
+		const error = new HttpError('Authentication error', 401);
+		return next(error);
+	}
+
+	res.status(200).json({ message: 'Your password has been changed!' });
 }
