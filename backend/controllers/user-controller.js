@@ -2,10 +2,13 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+const nodemailerSendgrid = require('nodemailer-sendgrid');
 
 const User = require('../models/user');
 
 const HttpError = require('../models/http-error');
+const { response } = require('express');
 
 exports.index = async (req, res, next) => {
 
@@ -130,7 +133,7 @@ exports.login = async (req, res, next) => {
 	let token;
 	try {
 		token = jwt.sign(
-			{ userId: user.id, email: user.emil },
+			{ userId: user.id, email: user.email },
 			process.env.JWT_KEY,
 			{ expiresIn: '12h' },
 		);
@@ -203,3 +206,53 @@ exports.update = async (req, res, next) => {
 
 	res.status(200).json({ message: 'User updated!', user: updatedUser });
 };
+
+exports.forgotPassword = async (req, res, next) => {
+	const { email } = req.body;
+
+	let user;
+	try {
+		user = await User.findOne({ email: email });
+	} catch (err) {
+		const error = new HttpError('Unable to find the user', 500);
+		return next(error);
+	}
+
+	let token;
+	try {
+		token = jwt.sign(
+			{ userId: user.id, email: user.email },
+			process.env.RESET_PASSWORD_KEY,
+			{ expiresIn: '20m' },
+		);
+	} catch (err) {
+		const error = new HttpError('Unable to generate JWT', 500);
+		return next(error);
+	}
+
+	const transport = nodemailer.createTransport(
+		nodemailerSendgrid({
+			apiKey: process.env.SENDGRID_API_KEY
+		})
+	);
+	//
+	transport.sendMail({
+		from: process.env.MAILER_EMAIL,
+		to: `${email}, jediminipedia@gmail.com`,
+		subject: 'Reset Password Link',
+		html: `<h1>Please visit the bellow link to reset your password</h1>
+		<p>${process.env.CLIENT_URL}/resetpass/${token}</p>`
+	}).then(([res]) => {
+		console.log('Message delivered with code %s %s', res.statusCode, res.statusMessage);
+	})
+		.catch(err => {
+			console.log('Errors occurred, failed to deliver message');
+
+			if (err.response && err.response.body && err.response.body.errors) {
+				err.response.body.errors.forEach(error => console.log('%s: %s', error.field, error.message));
+			} else {
+				console.log(err);
+			}
+		});
+	res.status(202).json({ message: 'Message delivered succesfully' });
+}

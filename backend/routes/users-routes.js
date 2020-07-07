@@ -21,6 +21,8 @@ router.post('/login',
 	],
 	userController.login);
 
+router.get('/forgot', userController.forgotPassword);
+
 router.use(checkAuth);
 
 router.get('/', userController.index);
