@@ -6,8 +6,7 @@ export const useHttpClient = () => {
 
 	const activeHttpRequests = useRef([]);
 
-	//useCallback = evitar que essa função seja recriada toda vez que um component
-	// que utiliza este hook rerender
+
 	const sendRequest = useCallback(
 		async (url, method = 'GET', body = null, headers = {}) => {
 			setIsLoading(true);
@@ -38,8 +37,7 @@ export const useHttpClient = () => {
 			} catch (err) {
 				setError(err.message);
 				setIsLoading(false);
-				//caso ocorra algum erro precisa do throw para sair
-				// se não vai continuar a lógica no componente
+
 				throw err;
 			}
 		}, []);
@@ -48,10 +46,9 @@ export const useHttpClient = () => {
 		setError(null);
 	};
 
-	//useEffect também pode ser usado no unmount do componente
 	useEffect(() => {
 		return () => {
-			// eslint-disable-next-line react-hooks/exhaustive-deps
+
 			activeHttpRequests.current.forEach(abortCtrl => abortCtrl.abort());
 		};
 	}, []);

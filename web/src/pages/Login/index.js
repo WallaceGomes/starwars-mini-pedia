@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import { Redirect } from 'react-router-dom';
 import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from '../../util/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpiner';
@@ -9,8 +8,6 @@ import Logo from '../../components/Logo';
 import { validate, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../util/validators';
 
 import { Container, SwitchMode, Validate } from './styles';
-
-//TODO : Validation
 
 const Login = () => {
 	const [userEmail, setUserEmail] = useState('');
@@ -34,7 +31,7 @@ const Login = () => {
 		if (isForgotMode) {
 			try {
 				const response = await sendRequest(
-					'http://localhost:5000/api/users/forgot',
+					`${process.env.REACT_APP_BACKEND_URL}/users/forgot`,
 					'POST',
 					JSON.stringify({
 						email: userEmail,
@@ -56,7 +53,7 @@ const Login = () => {
 		if (isLoginMode) {
 			try {
 				const response = await sendRequest(
-					'http://localhost:5000/api/users/login',
+					`${process.env.REACT_APP_BACKEND_URL}/users/login`,
 					'POST',
 					JSON.stringify({
 						email: userEmail,
@@ -74,7 +71,7 @@ const Login = () => {
 		} else {
 			try {
 				const response = await sendRequest(
-					'http://localhost:5000/api/users/signup',
+					`${process.env.REACT_APP_BACKEND_URL}/users/signup`,
 					'POST',
 					JSON.stringify({
 						email: userEmail,

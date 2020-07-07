@@ -108,21 +108,6 @@ const App = () => {
 		);
 	}
 
-	// const routes = (
-	// 	<Switch>
-	// 		<Route path="/" exact>
-	// 			<Home />
-	// 		</Route>
-	// 		<Route path="/login" exact>
-	// 			<Login />
-	// 		</Route>
-	// 		<Route path="/admin" >
-	// 			<Admin />
-	// 		</Route>
-	// 		<Redirect to="/" />
-	// 	</Switch>
-	// );
-
 	return (
 		<AuthContext.Provider
 			value={{

@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 import LoadingSpinner from '../../components/LoadingSpiner';
-import Card from '../../components/Card';
 import Logo from '../../components/Logo';
 import { Container, Description, ListItens } from './styles';
 
@@ -21,7 +19,7 @@ const Admin = () => {
 	useEffect(() => {
 		const storedData = JSON.parse(localStorage.getItem('userData'));
 
-		sendRequest('http://localhost:5000/api/users/',
+		sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/`,
 			'GET',
 			null,
 			{

@@ -7,7 +7,6 @@ import Logo from '../../components/Logo';
 import { validate, VALIDATOR_MINLENGTH } from '../../util/validators';
 
 import { Container, Validate } from './styles';
-//TODO : Validation
 
 const ResetPass = () => {
 
@@ -26,7 +25,7 @@ const ResetPass = () => {
 		const token = url.slice(-229);
 		try {
 			const response = await sendRequest(
-				`http://localhost:5000/api/users/reset/${token}`,
+				`${process.env.REACT_APP_BACKEND_URL}/users/reset/${token}`,
 				'PATCH',
 				JSON.stringify({
 					newPassword: userPassword,
