@@ -49,7 +49,7 @@ const Admin = () => {
 					<span>Name</span>
 					<span>Email</span>
 					<span>Created at</span>
-					<span>Edited at</span>
+					<span>Updated at</span>
 				</Description>
 				{
 					users && (
@@ -60,7 +60,7 @@ const Admin = () => {
 									<span>{user.name}</span>
 									<span>{user.email}</span>
 									<span>{user.created_at}</span>
-									<span>{user.edited_at || 'N/A'}</span>
+									<span>{user.updated_at || 'N/A'}</span>
 								</ListItens>
 							)
 						})

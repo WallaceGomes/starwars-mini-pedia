@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { Redirect } from 'react-router-dom';
 import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from '../../util/AuthContext';
 import LoadingSpinner from '../../components/LoadingSpiner';
@@ -42,7 +43,10 @@ const Login = () => {
 						'Content-Type': 'application/json',
 					},
 				);
-				console.log(response);
+				if (response.message === "Message delivered succesfully") {
+					alert('Check your email for the reset link!');
+				}
+
 			} catch (err) {
 				console.log(err);
 			}
@@ -65,6 +69,7 @@ const Login = () => {
 				auth.login(response.userId, response.token);
 			} catch (err) {
 				console.log(err);
+				alert(err.message);
 			}
 		} else {
 			try {
@@ -83,6 +88,7 @@ const Login = () => {
 				auth.login(response.userId, response.token);
 			} catch (err) {
 				console.log(err);
+				alert(err.message);
 			}
 		}
 	};
