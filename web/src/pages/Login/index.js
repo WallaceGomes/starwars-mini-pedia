@@ -17,6 +17,7 @@ const Login = () => {
 	const [userName, setUserName] = useState('');
 
 	const [isLoginMode, setIsLoginMode] = useState(true);
+	const [isForgotMode, setForgotMode] = useState(false);
 	const { sendRequest, isLoading } = useHttpClient();
 
 	const auth = useContext(AuthContext);
@@ -29,9 +30,28 @@ const Login = () => {
 	const authSubmitHandler = async (event) => {
 		event.preventDefault();
 
+		if (isForgotMode) {
+			try {
+				const response = await sendRequest(
+					'http://localhost:5000/api/users/forgot',
+					'POST',
+					JSON.stringify({
+						email: userEmail,
+					}),
+					{
+						'Content-Type': 'application/json',
+					},
+				);
+				console.log(response);
+			} catch (err) {
+				console.log(err);
+			}
+			return;
+		}
+
 		if (isLoginMode) {
 			try {
-				const reponse = await sendRequest(
+				const response = await sendRequest(
 					'http://localhost:5000/api/users/login',
 					'POST',
 					JSON.stringify({
@@ -42,7 +62,7 @@ const Login = () => {
 						'Content-Type': 'application/json',
 					},
 				);
-				auth.login(reponse.userId, reponse.token);
+				auth.login(response.userId, response.token);
 			} catch (err) {
 				console.log(err);
 			}
@@ -67,10 +87,43 @@ const Login = () => {
 		}
 	};
 
+	const switchForgotModeHandler = () => {
+		setForgotMode((prevMode) => !prevMode);
+	}
+
 	const switchModeHandler = () => {
 		setIsLoginMode((prevMode) => !prevMode);
 	};
 
+	if (isForgotMode) {
+		return (
+			<>
+				{isLoading && <LoadingSpinner asOverLay />}
+				<Container>
+					<Logo></Logo>
+					<form onSubmit={authSubmitHandler}>
+						{!isEmailValid && (
+							<Validate>Please enter a valid email address</Validate>
+						)}
+						<Input
+							type="email"
+							name="userEmail"
+							placeholder="Email"
+							value={userEmail}
+							setValue={setUserEmail}
+						/>
+						<Button type="submit">Send me an e-mail!</Button>
+					</form>
+					<SwitchMode>
+						<small>I remember my password</small>
+						<Button onClick={switchForgotModeHandler}>
+							Login
+					</Button>
+					</SwitchMode>
+				</Container>
+			</>
+		)
+	}
 	//loading spinner
 	return (
 		<>
@@ -118,6 +171,12 @@ const Login = () => {
 					<small>{isLoginMode ? `Don't have an account?` : 'Already have an account?'}</small>
 					<Button onClick={switchModeHandler}>
 						{isLoginMode ? 'Signup' : 'Login'}
+					</Button>
+				</SwitchMode>
+				<SwitchMode>
+					<small>I forgot my password</small>
+					<Button onClick={switchForgotModeHandler}>
+						Reset Password
 					</Button>
 				</SwitchMode>
 			</Container>

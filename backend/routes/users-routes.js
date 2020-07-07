@@ -21,9 +21,9 @@ router.post('/login',
 	],
 	userController.login);
 
-router.get('/forgot', userController.forgotPassword);
+router.post('/forgot', userController.forgotPassword);
 
-router.put('/reset/:resetLink', userController.resetPass);
+router.patch('/reset/:resetLink', userController.resetPass);
 
 router.use(checkAuth);
 
