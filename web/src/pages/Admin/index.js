@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
+import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
+
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 import LoadingSpinner from '../../components/LoadingSpiner';
@@ -43,22 +45,22 @@ const Admin = () => {
 				</Header>
 				{isLoading && LoadingSpinner}
 				<Description>
-					<span>ID</span>
 					<span>Name</span>
 					<span>Email</span>
-					<span>Created at</span>
-					<span>Updated at</span>
+					<span>ID</span>
+					<span>Edit</span>
+					<span>Delete</span>
 				</Description>
 				{
 					users && (
 						users.map((user) => {
 							return (
 								<ListItens key={user._id}>
-									<span>{user._id}</span>
 									<span>{user.name}</span>
 									<span>{user.email}</span>
-									<span>{user.created_at}</span>
-									<span>{user.updated_at || 'N/A'}</span>
+									<span>{user._id}</span>
+									<span><AiFillEdit onClick={() => { console.log(user._id) }} size={20} /></span>
+									<span><AiFillDelete onClick={() => { console.log(user._id) }} size={20} /></span>
 								</ListItens>
 							)
 						})

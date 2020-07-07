@@ -25,7 +25,11 @@ export const Description = styled.section`
 	margin-bottom: 5px;
 
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-gap: 40px;
+	grid-template-columns: 1fr 2fr 2fr 0.5fr 0.5fr;
+	span{
+		justify-items: start;
+	}
 `;
 
 export const ListItens = styled.section`
@@ -36,5 +40,16 @@ export const ListItens = styled.section`
 	margin-bottom: 5px;
 
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-gap: 50px;
+	grid-template-columns: 10% 2fr 2fr 0.5fr 0.5fr;
+	span{
+		justify-items: start;
+
+		svg{
+			&:hover{
+			cursor: pointer;
+		}
+		}
+	}
+
 `;
