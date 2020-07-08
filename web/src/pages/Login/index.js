@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useHttpClient } from '../../hooks/http-hook';
@@ -19,6 +20,7 @@ const Login = () => {
 	const { sendRequest, isLoading } = useHttpClient();
 
 	const auth = useContext(AuthContext);
+	const history = useHistory();
 
 	//isso aqui está horrivel e dá pra melhorar, é temporário...
 	const isEmailValid = validate(userEmail, [VALIDATOR_EMAIL(), VALIDATOR_REQUIRE()]);
@@ -134,16 +136,6 @@ const Login = () => {
 			<Container>
 				<Logo></Logo>
 				<form onSubmit={authSubmitHandler}>
-					{!isEmailValid && (
-						<Validate>Please enter a valid email address</Validate>
-					)}
-					<Input
-						type="email"
-						name="userEmail"
-						placeholder="Email"
-						value={userEmail}
-						setValue={setUserEmail}
-					/>
 					{!isLoginMode && (
 						<>
 							{!isUserNameValid && (
@@ -158,6 +150,16 @@ const Login = () => {
 							/>
 						</>
 					)}
+					{!isEmailValid && (
+						<Validate>Please enter a valid email address</Validate>
+					)}
+					<Input
+						type="email"
+						name="userEmail"
+						placeholder="Email"
+						value={userEmail}
+						setValue={setUserEmail}
+					/>
 					{!isPasswordValid && (
 						<Validate>Password min 6 chars</Validate>
 					)}

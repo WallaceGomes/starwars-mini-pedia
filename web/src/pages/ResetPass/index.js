@@ -5,6 +5,7 @@ import { useHttpClient } from '../../hooks/http-hook';
 import LoadingSpinner from '../../components/LoadingSpiner';
 import Logo from '../../components/Logo';
 import { validate, VALIDATOR_MINLENGTH } from '../../util/validators';
+import { useHistory } from 'react-router-dom';
 
 import { Container, Validate } from './styles';
 
@@ -12,6 +13,7 @@ const ResetPass = () => {
 
 	const [userPassword, setUserPassword] = useState('');
 	const { sendRequest, isLoading } = useHttpClient();
+	const history = useHistory();
 
 	//isso aqui está horrivel e dá pra melhorar, é temporário...
 	const isPasswordValid = validate(userPassword, [VALIDATOR_MINLENGTH(6)]);
@@ -37,6 +39,7 @@ const ResetPass = () => {
 			console.log(response);
 			if (response.message === "Your password has been changed!") {
 				alert(response.message);
+				history.push("/login");
 			}
 		} catch (err) {
 			console.log(err);

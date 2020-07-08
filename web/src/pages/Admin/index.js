@@ -50,7 +50,6 @@ const Admin = () => {
 		).then((response) => {
 			setUsers(response);
 		});
-		return;
 	}, []);
 
 	const newUserSubmitHandler = async (event) => {
@@ -68,7 +67,7 @@ const Admin = () => {
 					'Content-Type': 'application/json',
 				},
 			);
-			console.log(response);
+			setUsers([...users, response]);
 		} catch (err) {
 			console.log(err);
 			alert(err.message);
@@ -91,6 +90,13 @@ const Admin = () => {
 					'Authorization': `Bearer ${storedData.token}`
 				}
 			);
+			const editedUser = { _id: editUserId, name: editUserName, email: editUserEmail };
+			const index = users.findIndex(user => user._id === editUserId);
+			if (index !== -1) {
+				const auxUsers = [...users];
+				auxUsers[index] = editedUser;
+				setUsers(auxUsers);
+			}
 			console.log(response);
 		} catch (err) {
 			console.log(err);
@@ -111,6 +117,12 @@ const Admin = () => {
 					'Authorization': `Bearer ${storedData.token}`
 				}
 			);
+			const index = users.findIndex(user => user._id === userId);
+			if (index !== -1) {
+				const newUsers = [...users];
+				newUsers.splice(index, 1);
+				setUsers(newUsers);
+			}
 			console.log(response);
 		} catch (err) {
 			console.log(err);

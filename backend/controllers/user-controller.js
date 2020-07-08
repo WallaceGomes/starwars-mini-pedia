@@ -8,7 +8,6 @@ const nodemailerSendgrid = require('nodemailer-sendgrid');
 const User = require('../models/user');
 
 const HttpError = require('../models/http-error');
-const { response } = require('express');
 
 exports.index = async (req, res, next) => {
 
@@ -88,8 +87,8 @@ exports.signup = async (req, res, next) => {
 	}
 
 	res.status(201).json({
-		userName: createdUser.name,
-		userId: createdUser.id,
+		name: createdUser.name,
+		_id: createdUser.id,
 		email: createdUser.email,
 		token: token,
 	});
