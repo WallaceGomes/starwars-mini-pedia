@@ -29,7 +29,7 @@ router.use(checkAuth);
 
 router.get('/', userController.index);
 
-router.put('/:userId',
+router.patch('/:userId',
 	[
 		body('name').not().isEmpty(),
 		body('email').isEmail(),

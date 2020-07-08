@@ -204,7 +204,7 @@ exports.update = async (req, res, next) => {
 		return next(error);
 	}
 
-	res.status(200).json({ message: 'User updated!', user: updatedUser });
+	res.status(200).json({ message: 'User updated!' });
 };
 
 exports.forgotPassword = async (req, res, next) => {
