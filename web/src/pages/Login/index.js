@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import Modal from 'react-modal';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useHttpClient } from '../../hooks/http-hook';
@@ -9,6 +9,31 @@ import Logo from '../../components/Logo';
 import { validate, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../util/validators';
 
 import { Container, SwitchMode, Validate } from './styles';
+
+//Modal styles
+const customStyles = {
+	overlay: {
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.75)'
+	},
+	content: {
+		top: '50%',
+		left: '50%',
+		right: 'auto',
+		bottom: 'auto',
+		marginRight: '-50%',
+		transform: 'translate(-50%, -50%)',
+		backgroundColor: '#262626',
+		color: '#fff',
+		fontWeigth: 'bold'
+	}
+};
+
+Modal.setAppElement('#root');
 
 const Login = () => {
 	const [userEmail, setUserEmail] = useState('');
@@ -20,12 +45,18 @@ const Login = () => {
 	const { sendRequest, isLoading } = useHttpClient();
 
 	const auth = useContext(AuthContext);
-	const history = useHistory();
 
 	//isso aqui está horrivel e dá pra melhorar, é temporário...
 	const isEmailValid = validate(userEmail, [VALIDATOR_EMAIL(), VALIDATOR_REQUIRE()]);
 	const isPasswordValid = validate(userPassword, [VALIDATOR_MINLENGTH(6)]);
 	const isUserNameValid = validate(userName, [VALIDATOR_REQUIRE()])
+
+	const [modalIsOpen, setIsOpen] = useState(false);
+	const [modalText, setModalText] = useState('Message delivered succesfully');
+
+	function switchModalState() {
+		setIsOpen((prevMode) => !prevMode);
+	}
 
 	const authSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -42,12 +73,12 @@ const Login = () => {
 						'Content-Type': 'application/json',
 					},
 				);
-				if (response.message === "Message delivered succesfully") {
-					alert('Check your email for the reset link!');
-				}
-
+				setModalText(response.message);
+				switchModalState();
 			} catch (err) {
 				console.log(err);
+				setModalText('Unexpected error, please check your email and try again');
+				switchModalState();
 			}
 			return;
 		}
@@ -66,9 +97,12 @@ const Login = () => {
 					},
 				);
 				auth.login(response.userId, response.token);
+				setModalText(response.message);
+				switchModalState();
 			} catch (err) {
 				console.log(err);
-				alert(err.message);
+				setModalText(err.message)
+				switchModalState();
 			}
 		} else {
 			try {
@@ -85,9 +119,12 @@ const Login = () => {
 					},
 				);
 				auth.login(response.userId, response.token);
+				setModalText(response.message);
+				switchModalState();
 			} catch (err) {
 				console.log(err);
-				alert(err.message);
+				setModalText(err.message);
+				switchModalState();
 			}
 		}
 	};
@@ -103,7 +140,19 @@ const Login = () => {
 	if (isForgotMode) {
 		return (
 			<>
-				{isLoading && <LoadingSpinner asOverLay />}
+				{isLoading && <LoadingSpinner />}
+				<Modal
+					isOpen={modalIsOpen}
+					onRequestClose={switchModalState}
+					style={customStyles}
+					contentLabel="Alert Modal"
+				>
+
+					<div>{modalText}</div>
+					<br />
+					<br />
+					<Button onClick={switchModalState}>Close</Button>
+				</Modal>
 				<Container>
 					<Logo></Logo>
 					<form onSubmit={authSubmitHandler}>
@@ -133,6 +182,18 @@ const Login = () => {
 	return (
 		<>
 			{isLoading && <LoadingSpinner asOverLay />}
+			<Modal
+				isOpen={modalIsOpen}
+				onRequestClose={switchModalState}
+				style={customStyles}
+				contentLabel="Alert Modal"
+			>
+
+				<div>{modalText}</div>
+				<br />
+				<br />
+				<Button onClick={switchModalState}>Close</Button>
+			</Modal>
 			<Container>
 				<Logo></Logo>
 				<form onSubmit={authSubmitHandler}>

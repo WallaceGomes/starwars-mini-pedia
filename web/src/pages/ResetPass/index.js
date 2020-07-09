@@ -6,8 +6,34 @@ import LoadingSpinner from '../../components/LoadingSpiner';
 import Logo from '../../components/Logo';
 import { validate, VALIDATOR_MINLENGTH } from '../../util/validators';
 import { useHistory } from 'react-router-dom';
+import Modal from 'react-modal';
 
 import { Container, Validate } from './styles';
+
+//Modal styles
+const customStyles = {
+	overlay: {
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.75)'
+	},
+	content: {
+		top: '50%',
+		left: '50%',
+		right: 'auto',
+		bottom: 'auto',
+		marginRight: '-50%',
+		transform: 'translate(-50%, -50%)',
+		backgroundColor: '#262626',
+		color: '#fff',
+		fontWeigth: 'bold'
+	}
+};
+
+Modal.setAppElement('#root');
 
 const ResetPass = () => {
 
@@ -17,6 +43,16 @@ const ResetPass = () => {
 
 	//isso aqui está horrivel e dá pra melhorar, é temporário...
 	const isPasswordValid = validate(userPassword, [VALIDATOR_MINLENGTH(6)]);
+
+	const [modalIsOpen, setIsOpen] = useState(false);
+	const [modalText, setModalText] = useState('');
+
+	function switchModalState() {
+		setIsOpen((prevMode) => !prevMode);
+		if (modalIsOpen) {
+			history.push("/login");
+		}
+	}
 
 	const authSubmitHandler = async (event) => {
 		event.preventDefault();
@@ -37,12 +73,12 @@ const ResetPass = () => {
 				},
 			);
 			console.log(response);
-			if (response.message === "Your password has been changed!") {
-				alert(response.message);
-				history.push("/login");
-			}
+			setModalText(response.message);
+			switchModalState();
 		} catch (err) {
 			console.log(err);
+			setModalText(err.message);
+			switchModalState();
 		}
 
 	}
@@ -50,6 +86,18 @@ const ResetPass = () => {
 	return (
 		<>
 			{isLoading && <LoadingSpinner asOverLay />}
+			<Modal
+				isOpen={modalIsOpen}
+				onRequestClose={switchModalState}
+				style={customStyles}
+				contentLabel="Alert Modal"
+			>
+
+				<div>{modalText}</div>
+				<br />
+				<br />
+				<Button onClick={switchModalState}>Close</Button>
+			</Modal>
 			<Container>
 				<Logo></Logo>
 				<form onSubmit={authSubmitHandler}>

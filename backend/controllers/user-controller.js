@@ -253,7 +253,7 @@ exports.forgotPassword = async (req, res, next) => {
 				console.log(err);
 			}
 		});
-	res.status(202).json({ message: 'Message delivered succesfully' });
+	res.status(202).json({ message: 'We sent you an email with the reset link!' });
 }
 
 exports.resetPass = async (req, res, next) => {

@@ -35,7 +35,8 @@ export const useHttpClient = () => {
 				setIsLoading(false);
 				return responseData;
 			} catch (err) {
-				setError(err.message);
+
+				setError('Unable to reach the server! Try again later...');
 				setIsLoading(false);
 
 				throw err;
