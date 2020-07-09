@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Modal from 'react-modal';
 
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 
@@ -12,6 +13,32 @@ import { validate, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } fro
 
 import { useHttpClient } from '../../hooks/http-hook';
 import { AuthContext } from './../../util/AuthContext';
+
+//Modal styles
+const customStyles = {
+	overlay: {
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(0, 0, 0, 0.75)'
+	},
+	content: {
+		top: '50%',
+		left: '50%',
+		right: 'auto',
+		bottom: 'auto',
+		marginRight: '-50%',
+		transform: 'translate(-50%, -50%)',
+		backgroundColor: '#262626',
+		color: '#fff',
+		fontWeigth: 'bold'
+	}
+};
+
+Modal.setAppElement('#root');
+
 
 const Admin = () => {
 
@@ -39,6 +66,13 @@ const Admin = () => {
 	const isEditUserEmailValid = validate(editUserEmail, [VALIDATOR_EMAIL(), VALIDATOR_REQUIRE()]);
 
 	const storedData = JSON.parse(localStorage.getItem('userData'));
+
+	const [modalIsOpen, setIsOpen] = useState(false);
+	const [modalText, setModalText] = useState('');
+
+	function switchModalState() {
+		setIsOpen((prevMode) => !prevMode);
+	}
 
 	useEffect(() => {
 		sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/`,
@@ -97,10 +131,12 @@ const Admin = () => {
 				auxUsers[index] = editedUser;
 				setUsers(auxUsers);
 			}
-			console.log(response);
+			setModalText(response.message);
+			switchModalState();
 		} catch (err) {
 			console.log(err);
-			alert(err.message);
+			setModalText(err.message);
+			switchModalState();
 		}
 		switchEditModeHandler();
 	}
@@ -150,6 +186,18 @@ const Admin = () => {
 					<Button onClick={switchNewUserModeHandler} >Voltar</Button>
 				</Header>
 				{isLoading && <LoadingSpinner asOverLay />}
+				<Modal
+					isOpen={modalIsOpen}
+					onRequestClose={switchModalState}
+					style={customStyles}
+					contentLabel="Alert Modal"
+				>
+
+					<div>{modalText}</div>
+					<br />
+					<br />
+					<Button onClick={switchModalState}>Close</Button>
+				</Modal>
 				<FormContainer>
 					<form onSubmit={newUserSubmitHandler}>
 						{!isNewUserNameValid && (
@@ -196,6 +244,18 @@ const Admin = () => {
 					<Button onClick={() => switchEditModeHandler()} >Voltar</Button>
 				</Header>
 				{isLoading && <LoadingSpinner asOverLay />}
+				<Modal
+					isOpen={modalIsOpen}
+					onRequestClose={switchModalState}
+					style={customStyles}
+					contentLabel="Alert Modal"
+				>
+
+					<div>{modalText}</div>
+					<br />
+					<br />
+					<Button onClick={switchModalState}>Close</Button>
+				</Modal>
 				<FormContainer>
 					<form onSubmit={editUserSubmitHandler}>
 						{!isEditUserNameValid && (
